@@ -2,10 +2,13 @@ import './style.css'
 
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+// import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+// import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+// import { UnrealBloomPass, BloomEffect } from 'three/addons/postprocessing/*';
+// import { OutputPass } from 'three/addons/postprocessing/';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-//import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -58,16 +61,17 @@ camera.position.setZ(30);
 const renderPass = new RenderPass( scene, camera );
 
 const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
-bloomPass.threshold = 10;
-bloomPass.strength = 2;
-bloomPass.radius = 1;
+bloomPass.threshold = 0;
+bloomPass.strength = 1;
+bloomPass.radius = 0;
 
-//const outputPass = new OutputPass();
+// const outputPass = new OutputPass();
+//const bloomer = new BloomEffect()
 
 const composer = new EffectComposer( renderer );
 composer.addPass( renderPass );
 composer.addPass( bloomPass );
-//composer.addPass( outputPass );
+// composer.addPass( outputPass );
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
