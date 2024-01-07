@@ -6,3 +6,11 @@ canvas{
   left: 0;
   position: fixed;
 }
+#content{
+  height: 100vh;
+  width: 100wh;
+  background-color: rgba(255, 255, 255, 1) ;
+  color: rgba(255, 255, 255, 1) ;
+  padding-right: 5%;
+  padding-left: 5%;
+}
