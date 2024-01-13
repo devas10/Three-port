@@ -45,8 +45,10 @@ jobs:
         uses: actions/upload-pages-artifact@v2
         with:
           # Upload dist repository
-          path: './dist'
-          publish_dir: './dist'
+          path: |
+           ./dist
+           ./dist/assets
+           ./assets
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
