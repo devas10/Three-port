@@ -46,9 +46,9 @@ jobs:
         with:
           # Upload dist repository
           path: |
-           ./dist
-           ./dist/assets
-           ./assets
+           ./dist/
+           ./dist/assets/
+           ./assets/
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
