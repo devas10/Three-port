@@ -1,3 +1,3 @@
 export default {
-  base:'./Three-port/'
+  base:'/Three-port'
 }
