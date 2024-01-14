@@ -30,23 +30,21 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const geometry = new THREE.TorusGeometry(10, 1, 10, 100);
+function generateStars(stars, scene1) {
 
-const material = new THREE.MeshStandardMaterial({
-  color: 0xff0000,
-});
-
-//material.emissive.setHex(0x000000);
-const cube = new THREE.Mesh(geometry, material);
-mainScene.add(cube);
+  for (let count = 0; count < stars; count++) {
+    const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+    addStar(scene,x, y, z);
+  }
+}
 
 function addStar(scene1, x, y, z) {
-  const color = THREE.MathUtils.randInt(0, 0xffffff)
+  const color = THREE.MathUtils.randInt(0, 0xffffff);
   const material = new THREE.MeshBasicMaterial({
     color: color,
   });
 
-  const starSize= THREE.MathUtils.randInt(4,15);
+  const starSize = THREE.MathUtils.randInt(4, 12);
   const genericStar = new THREE.SphereGeometry(starSize, 25, 25);
 
   const star = new THREE.Mesh(genericStar, material);
@@ -55,10 +53,12 @@ function addStar(scene1, x, y, z) {
   scene1.add(star);
 }
 
+generateStars(50,scene);
+
 const pointLight = new THREE.PointLight(0xffffff);
 mainScene.add(pointLight);
 
-camera.position.setZ(50);
+camera.position.setZ(100);
 
 const renderPass = new RenderPass(scene, camera);
 
@@ -99,8 +99,12 @@ function onMouseDown(event) {
   raycaster.ray.intersectPlane(plane, point);
 
   console.log(point);
-  addStar(bloomGroup, point.x, point.y, point.z);
+  addStar(scene, point.x, point.y, point.z);
 }
+
+
+let strengthDir= true;
+let radiusDir= true;
 
 function animate() {
   requestAnimationFrame(animate);
@@ -108,9 +112,26 @@ function animate() {
   controls.update();
   composer.render();
 
-  //bloomPass.radius += bloomPass.radius < 1? 0.008 : -0.5; 
+  const maxRadius = 1.2; 
+  const minRadius = 0.2;
+  const maxStrength =  0.8; 
+  const minStrength =  0.2;
 
-  bloomPass.strength += bloomPass.strength < 1? 0.005 : -0.5;
+
+  const radiusStep = 0.015;
+  const strengthStep = 0.008;
+
+  if (bloomPass.strength > maxStrength && strengthDir == true)  strengthDir = false;
+  if (bloomPass.strength < minStrength && strengthDir == false) strengthDir = true;
+
+  bloomPass.strength += strengthDir? strengthStep : -strengthStep;
+
+  if (bloomPass.radius > maxRadius && radiusDir == true)  radiusDir = false;
+  if (bloomPass.radius < minRadius && radiusDir == false) radiusDir = true;
+
+  bloomPass.radius += radiusDir? radiusStep : -radiusStep;
+  console.log(bloomPass.radius);
+
   renderer.render(scene, camera);
 }
 
